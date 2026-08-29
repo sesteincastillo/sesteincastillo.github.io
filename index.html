@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Rafael — Desarrollador Full Stack</title>
-<link rel="icon" type="image/png" href="assets/logo.png">
+<link rel="icon" type="image/png" href="assets/logo-icon.png">
 <meta name="description" content="Rafael, fundador de Iffyware Systems. Sistemas de gestión web multi-tenant en Node.js, Express y Supabase.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -182,8 +182,9 @@
 
   /* ---------- section shell ---------- */
   section{ padding:64px 0; border-top:1px solid var(--line); }
-  section.reveal{ opacity:0; transform:translateY(18px); transition:opacity .6s ease, transform .6s ease; }
-  section.reveal.in{ opacity:1; transform:translateY(0); }
+  section.reveal{ opacity:1; transform:none; }
+  section.reveal.pre{ opacity:0; transform:translateY(18px); transition:opacity .6s ease, transform .6s ease; }
+  section.reveal.pre.in{ opacity:1; transform:translateY(0); }
   .sec-head{ display:flex; align-items:baseline; gap:14px; margin-bottom:36px; }
   .sec-tag{ font-family:var(--font-mono); font-size:12px; color:var(--accent); }
   .sec-head h2{ font-family:var(--font-display); font-size:26px; font-weight:600; }
@@ -331,7 +332,7 @@
 <div class="glow"></div>
 <div class="topbar">
   <div class="topbar-inner">
-    <div class="brand"><span class="brand-mark"><img src="assets/logo.png" alt="Iffyware Systems"></span> IFFYWARE SYSTEMS</div>
+    <div class="brand"><span class="brand-mark"><img src="assets/logo-icon.png" alt="Iffyware Systems"></span> IFFYWARE SYSTEMS</div>
     <div class="topbar-links">
       <a href="#proyectos">Proyectos</a>
       <a href="#stack">Stack</a>
@@ -512,6 +513,9 @@
     <p style="margin-top:14px; font-family:var(--font-mono); font-size:11.5px; color:var(--muted);">¿No se abre Gmail? Tocá el ícono de copiar y pegá la dirección en tu app de correo.</p>
   </section>
 
+  <div style="text-align:center; padding:24px 0 4px;">
+    <img src="assets/logo-full.png" alt="Iffyware Systems — Servicios Técnicos Integrales y Desarrollo de Sistemas" style="max-width:220px; width:100%; height:auto; opacity:0.92;">
+  </div>
   <footer>
     <span>IFFYWARE SYSTEMS © 2026</span>
     <span>RAFAEL — DESARROLLADOR FULL STACK</span>
@@ -550,7 +554,6 @@
     try { document.execCommand('copy'); done(); } catch (e) {}
     document.body.removeChild(ta);
   }
-</script>
   // El botón flotante abre un panel de confirmación antes de ir a WhatsApp (mejor tasa de clics que un link directo).
   const fab = document.getElementById('waFab');
   const panel = document.getElementById('waPanel');
@@ -563,17 +566,20 @@
   });
 
   // Revelado progresivo de secciones al hacer scroll.
-  const revealEls = document.querySelectorAll('.reveal');
-  if ('IntersectionObserver' in window) {
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) { entry.target.classList.add('in'); io.unobserve(entry.target); }
-      });
-    }, { threshold: 0.12 });
-    revealEls.forEach((el) => io.observe(el));
-  } else {
-    revealEls.forEach((el) => el.classList.add('in'));
-  }
+  // Por defecto (CSS) todo es visible; acá recién se marca 'pre' para animar,
+  // así si algo falla en este bloque, el contenido nunca queda invisible.
+  try {
+    const revealEls = document.querySelectorAll('.reveal');
+    if ('IntersectionObserver' in window) {
+      revealEls.forEach((el) => el.classList.add('pre'));
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) { entry.target.classList.add('in'); io.unobserve(entry.target); }
+        });
+      }, { threshold: 0.12 });
+      revealEls.forEach((el) => io.observe(el));
+    }
+  } catch (err) { /* si falla, las secciones quedan visibles por el CSS por defecto */ }
 </script>
 </body>
 </html>
